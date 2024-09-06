@@ -15,7 +15,7 @@ pipeline {
                 script {
                     try {
                         powershell './gradlew.bat clean build'  // Adjust this if you're using Windows
-                        echo 'Build successful!'
+                        echo 'Congratulation, build successful!!'
                     } catch (Exception e) {
                         echo 'Build failed!'
                         throw e  // Re-throw the exception to mark the build as failed
