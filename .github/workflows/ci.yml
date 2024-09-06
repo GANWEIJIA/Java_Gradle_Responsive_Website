@@ -26,7 +26,7 @@ jobs:
         run: .\gradlew.bat clean build
         shell: powershell
       - if: success()
-        run: echo "Build successful!"
+        run: echo "Congratulation, build successful!"
       - if: failure()
         run: echo "Build failed!"
 
