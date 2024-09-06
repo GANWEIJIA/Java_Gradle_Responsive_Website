@@ -19,25 +19,25 @@ jobs:
       # Checkout the code from the repository
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          ref: main  # Ensure it's checking out the 'main' branch
       - run: echo "Checkout successful!"
 
       # Build the project using Gradle
       - name: Build with Gradle
-        run: |
-          ./gradlew.bat clean build
+        run: ./gradlew.bat clean build
         shell: powershell
-      - run: echo "Build successful!" if: success()
-      - run: echo "Build failed!" if: failure()
+      - if: success()
+        run: echo "Build successful!"
+      - if: failure()
+        run: echo "Build failed!"
 
       # Run the tests
       - name: Run tests with Gradle
-        run: |
-          ./gradlew.bat test
+        run: ./gradlew.bat test
         shell: powershell
-      - run: echo "Tests executed successfully!" if: success()
-      - run: echo "Tests execution failed!" if: failure()
+      - if: success()
+        run: echo "Tests executed successfully!"
+      - if: failure()
+        run: echo "Tests execution failed!"
 
       # Build Docker image and push to Docker Hub
       - name: Set up Docker Buildx
@@ -54,8 +54,10 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/responsive-web:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/responsive-web:latest
 
-      - run: echo "Docker image built and pushed successfully!" if: success()
-      - run: echo "Docker build or push failed!" if: failure()
+      - if: success()
+        run: echo "Docker image built and pushed successfully!"
+      - if: failure()
+        run: echo "Docker build or push failed!"
 
       # Deploy to a remote server (optional)
       - name: Deploy to Server
@@ -67,12 +69,13 @@ jobs:
           docker rm my_app || true
           docker run -d --name my_app -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/responsive-web:latest
           EOF
-      - run: echo "Deployment successful!" if: success()
-      - run: echo "Deployment failed!" if: failure()
+      - if: success()
+        run: echo "Deployment successful!"
+      - if: failure()
+        run: echo "Deployment failed!"
 
       # Post build actions (e.g., clean up)
       - name: Clean up workspace
-        run: |
-          git clean -fdx  # Removes all untracked files and directories
+        run: git clean -fdx  # Removes all untracked files and directories
         shell: bash
       - run: echo "Cleaning up workspace"
